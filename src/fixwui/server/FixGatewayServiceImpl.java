@@ -65,7 +65,6 @@ FixGatewayService {
 	}
 	
 	Collections.sort(sessions);
-	_engine.stop();
 	return sessions;
     }
     
