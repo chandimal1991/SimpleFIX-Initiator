@@ -48,7 +48,7 @@ FixGatewayService {
 		
 		_engine.startInProcess(application);
 		
-		System.out.println("engine started");
+		
 	    }
 	} catch ( Exception e ) {
 	    e.printStackTrace();
@@ -58,6 +58,7 @@ FixGatewayService {
     
     @Override
     public ArrayList<String> getSessionList() throws IllegalArgumentException {
+    	
 	ArrayList<String> sessions = new ArrayList<String>();
 	
 	for ( Session session : _engine.getAllSessions() ) {
@@ -71,27 +72,22 @@ FixGatewayService {
     @Override
     public void connectSession() throws IllegalArgumentException{
     	
-    	try {
-    	    
-    	    Class<?> classobj = Class.forName("simplefix.quickfix.EngineFactory");
-    	    Object engineobj = classobj.newInstance();
-    	    
-    	    if ( engineobj instanceof EngineFactory ) {
-    		
-    		_engineFact = (EngineFactory) engineobj;
-    		_engine = _engineFact.createEngine();
-    		_engine.initEngine("banzai.cfg");
-    		
-    		Application application = new _Application();
-    		
-    		_engine.startInProcess(application);
-    		
-    		System.out.println("Session Connected..");
-    	    }
-    	} catch ( Exception e ) {
-    	    e.printStackTrace();
-    	}
+    	Session sessionId =_engine.getAllSessions().get(0);
     	
+    	Message ordMsg = _engineFact.createMessage(MsgType.ORDER_SINGLE);
+
+        ordMsg.setValue(Tag.ClOrdID, "Cld-1234");
+        ordMsg.setValue(Tag.Symbol, "6758");
+        ordMsg.setValue(Tag.Side, "1");
+        ordMsg.setValue(Tag.OrderQty, "1000");
+        ordMsg.setValue(Tag.Price, "123.45");
+        ordMsg.setValue(Tag.OrdType, "2");
+        ordMsg.setValue(Tag.HandlInst, "3");
+        
+        ordMsg.setValue(Tag.TransactTime,"20200508-04:36:42");
+        
+        sessionId.sendAppMessage(ordMsg);
+    		
     }
     
     @Override
@@ -117,20 +113,7 @@ FixGatewayService {
 	
 	@Override
 	public void onLogon(final Session sessionId) {
-        Message ordMsg = _engineFact.createMessage(MsgType.ORDER_SINGLE);
-
-        ordMsg.setValue(Tag.ClOrdID, "Cld-1234");
-        ordMsg.setValue(Tag.Symbol, "6758");
-        ordMsg.setValue(Tag.Side, "1");
-        ordMsg.setValue(Tag.OrderQty, "1000");
-        ordMsg.setValue(Tag.Price, "123.45");
-        ordMsg.setValue(Tag.OrdType, "2");
-        ordMsg.setValue(Tag.HandlInst, "3");
-        
-        ordMsg.setValue(Tag.TransactTime,"20200508-04:36:42");
-        
-        sessionId.sendAppMessage(ordMsg);
-	    
+         
 	}
 	
 	@Override
