@@ -12,6 +12,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface FixGatewayService extends RemoteService {
     
     ArrayList<String> getSessionList() throws IllegalArgumentException;
-    String connectSession() throws IllegalArgumentException;
-    String disconnectSession() throws IllegalArgumentException;
+    void connectSession() throws IllegalArgumentException;
+    void disconnectSession() throws IllegalArgumentException;
 }

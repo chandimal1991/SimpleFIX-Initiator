@@ -69,7 +69,7 @@ FixGatewayService {
     }
     
     @Override
-    public String connectSession() throws IllegalArgumentException{
+    public void connectSession() throws IllegalArgumentException{
     	
     	try {
     	    
@@ -92,18 +92,16 @@ FixGatewayService {
     	    e.printStackTrace();
     	}
     	
-    	return "Session Connected..";
     }
     
     @Override
-    public String disconnectSession() throws IllegalArgumentException{
+    public void disconnectSession() throws IllegalArgumentException{
     	try {
     		_engine.stop();
     		System.out.println("Session Disconnected..");
     	}catch(Exception e) {
     		e.printStackTrace();
     	}
-    	return "Session Disconnected..";
     }
     
     private static class _Application implements Application {

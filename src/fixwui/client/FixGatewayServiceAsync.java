@@ -10,6 +10,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface FixGatewayServiceAsync {
     
     void getSessionList(AsyncCallback<ArrayList<String>> callback);
-    void connectSession(AsyncCallback<String> callback);
-    void disconnectSession(AsyncCallback<String> callback);
+    void connectSession(AsyncCallback<Void> callback);
+    void disconnectSession(AsyncCallback<Void> callback);
 }

@@ -97,7 +97,7 @@ public class Fix_wui implements EntryPoint {
 	// Listen for mouse events on the connect button.
 	btnConnect.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
-    	  fixGatewayService.connectSession(new AsyncCallback<String>() {
+    	  fixGatewayService.connectSession(new AsyncCallback<Void>() {
     		  
     		  @Override
     		    public void onFailure(final Throwable caught) {
@@ -105,10 +105,11 @@ public class Fix_wui implements EntryPoint {
     			
     		    }
     		    
-    		    @Override
-    		    public void onSuccess(final String result) {
-    		    	System.out.println(result);
-    		    }
+				@Override
+				public void onSuccess(Void result) {
+					// TODO Auto-generated method stub
+					
+				}
     	  });
    
       }
@@ -117,7 +118,7 @@ public class Fix_wui implements EntryPoint {
 	// Listen for mouse events on the Disconnect button.
 		btnDisconnect.addClickHandler(new ClickHandler() {
 	      public void onClick(ClickEvent event) {
-	    	  fixGatewayService.disconnectSession(new AsyncCallback<String>() {
+	    	  fixGatewayService.disconnectSession(new AsyncCallback<Void>() {
 	    		  
 	    		  @Override
 	    		    public void onFailure(final Throwable caught) {
@@ -126,7 +127,7 @@ public class Fix_wui implements EntryPoint {
 	    		    }
 	    		    
 	    		    @Override
-	    		    public void onSuccess(final String result) {
+	    		    public void onSuccess(Void result) {
 	    		    	System.out.println(result);
 	    		    }
 	    	  });
