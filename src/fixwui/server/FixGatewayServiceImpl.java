@@ -93,8 +93,9 @@ FixGatewayService {
     @Override
     public void disconnectSession() throws IllegalArgumentException{
     	try {
-    		_engine.stop();
-    		System.out.println("Session Disconnected..");
+    		Session sessionId = _engine.getAllSessions().get(0);
+    		Application application = new _Application();
+    		application.onLogout(sessionId);
     	}catch(Exception e) {
     		e.printStackTrace();
     	}
