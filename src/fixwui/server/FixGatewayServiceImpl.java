@@ -70,9 +70,9 @@ FixGatewayService {
     }
     
     @Override
-    public void connectSession() throws IllegalArgumentException{
+    public void connectSession(String sessionId) throws IllegalArgumentException{
     	
-    	Session sessionId =_engine.getAllSessions().get(0);
+    	Application application = new _Application();
     	
     	Message ordMsg = _engineFact.createMessage(MsgType.ORDER_SINGLE);
 
@@ -83,10 +83,16 @@ FixGatewayService {
         ordMsg.setValue(Tag.Price, "123.45");
         ordMsg.setValue(Tag.OrdType, "2");
         ordMsg.setValue(Tag.HandlInst, "3");
-        
         ordMsg.setValue(Tag.TransactTime,"20200508-04:36:42");
         
-        sessionId.sendAppMessage(ordMsg);
+    	for ( Session session : _engine.getAllSessions() ) {
+    		if(sessionId.equals(session.getSenderCompID() + "<-->" + session.getTargetCompID())) {
+    			
+    			//_engine.lookupSession(session.getSenderCompID(),session.getTargetCompID());
+    			application.onLogon(session);
+    			session.sendAppMessage(ordMsg);
+    		}
+    	}
     		
     }
     

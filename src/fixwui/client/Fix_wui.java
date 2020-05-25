@@ -32,8 +32,6 @@ public class Fix_wui implements EntryPoint {
      */
     private final FixGatewayServiceAsync fixGatewayService = GWT.create(FixGatewayService.class);
     
-    private CellTable<Object>            sentMsgs;
-    
     private ListBox                      sessionList;
     
     private ListBox                      msgTypeList;
@@ -51,10 +49,6 @@ public class Fix_wui implements EntryPoint {
 	RootPanel mainPanel = RootPanel.get("mainArea");
 	mainPanel.setSize("1024", "768");
 	mainPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-	
-	sentMsgs = new CellTable<Object>();
-	mainPanel.add(sentMsgs, 290, 10);
-	sentMsgs.setSize("477px", "613px");
 	
 	sessionList = new ListBox();
 	mainPanel.add(sessionList, 630, 10);
@@ -97,7 +91,8 @@ public class Fix_wui implements EntryPoint {
 	// Listen for mouse events on the connect button.
 	btnConnect.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
-    	  fixGatewayService.connectSession(new AsyncCallback<Void>() {
+    	  String session = sessionList.getSelectedValue();
+    	  fixGatewayService.connectSession(session,new AsyncCallback<Void>() {
     		  
     		  @Override
     		    public void onFailure(final Throwable caught) {
