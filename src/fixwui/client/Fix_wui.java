@@ -113,7 +113,8 @@ public class Fix_wui implements EntryPoint {
 	// Listen for mouse events on the Disconnect button.
 		btnDisconnect.addClickHandler(new ClickHandler() {
 	      public void onClick(ClickEvent event) {
-	    	  fixGatewayService.disconnectSession(new AsyncCallback<Void>() {
+	    	  String session = sessionList.getSelectedValue();
+	    	  fixGatewayService.disconnectSession(session,new AsyncCallback<Void>() {
 	    		  
 	    		  @Override
 	    		    public void onFailure(final Throwable caught) {

@@ -11,5 +11,5 @@ public interface FixGatewayServiceAsync {
     
     void getSessionList(AsyncCallback<ArrayList<String>> callback);
     void connectSession(String session,AsyncCallback<Void> callback);
-    void disconnectSession(AsyncCallback<Void> callback);
+    void disconnectSession(String session,AsyncCallback<Void> callback);
 }

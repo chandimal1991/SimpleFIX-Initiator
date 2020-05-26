@@ -72,8 +72,6 @@ FixGatewayService {
     @Override
     public void connectSession(String sessionId) throws IllegalArgumentException{
     	
-    	Application application = new _Application();
-    	
     	Message ordMsg = _engineFact.createMessage(MsgType.ORDER_SINGLE);
 
         ordMsg.setValue(Tag.ClOrdID, "Cld-1234");
@@ -89,19 +87,29 @@ FixGatewayService {
     		if(sessionId.equals(session.getSenderCompID() + "<-->" + session.getTargetCompID())) {
     			
     			//_engine.lookupSession(session.getSenderCompID(),session.getTargetCompID());
-    			application.onLogon(session);
-    			session.sendAppMessage(ordMsg);
+    			quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).logon();
+    			//application.onLogon(session);
+    			//session.sendAppMessage(ordMsg);
     		}
     	}
     		
     }
     
     @Override
-    public void disconnectSession() throws IllegalArgumentException{
+    public void disconnectSession(String sessionId) throws IllegalArgumentException{
     	try {
-    		Session sessionId = _engine.getAllSessions().get(0);
-    		Application application = new _Application();
-    		application.onLogout(sessionId);
+    		
+    		for ( Session session : _engine.getAllSessions() ) {
+    			
+        		if(sessionId.equals(session.getSenderCompID() + "<-->" + session.getTargetCompID())) {
+        			
+        			if(quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).isLoggedOn()) {
+        				
+        				quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).logout();
+        			}
+        		}
+        	}
+    		
     	}catch(Exception e) {
     		e.printStackTrace();
     	}
@@ -119,13 +127,16 @@ FixGatewayService {
 	}
 	
 	@Override
-	public void onLogon(final Session sessionId) {
+	public void onLogon(final Session session) {
+		
+		System.out.println("LoggedOn==>" + session.getSenderCompID() + "<-->" + session.getTargetCompID());
          
 	}
 	
 	@Override
-	public void onLogout(final Session arg0) {
+	public void onLogout(final Session session) {
 	    // TODO Auto-generated method stub
+		System.out.println("logout==>" + session.getSenderCompID() + "<-->" + session.getTargetCompID());
 	    
 	}
     };
