@@ -72,24 +72,17 @@ FixGatewayService {
     @Override
     public void connectSession(String sessionId) throws IllegalArgumentException{
     	
-    	Message ordMsg = _engineFact.createMessage(MsgType.ORDER_SINGLE);
-
-        ordMsg.setValue(Tag.ClOrdID, "Cld-1234");
-        ordMsg.setValue(Tag.Symbol, "6758");
-        ordMsg.setValue(Tag.Side, "1");
-        ordMsg.setValue(Tag.OrderQty, "1000");
-        ordMsg.setValue(Tag.Price, "123.45");
-        ordMsg.setValue(Tag.OrdType, "2");
-        ordMsg.setValue(Tag.HandlInst, "3");
-        ordMsg.setValue(Tag.TransactTime,"20200508-04:36:42");
-        
     	for ( Session session : _engine.getAllSessions() ) {
+    		
     		if(sessionId.equals(session.getSenderCompID() + "<-->" + session.getTargetCompID())) {
     			
-    			//_engine.lookupSession(session.getSenderCompID(),session.getTargetCompID());
-    			quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).logon();
-    			//application.onLogon(session);
-    			//session.sendAppMessage(ordMsg);
+    			if(!quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).isLoggedOn()) {
+    			
+    				quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).logon();
+    				
+    				System.out.println("Executing connectSession function==>"+ sessionId);
+    			}
+
     		}
     	}
     		
@@ -104,8 +97,10 @@ FixGatewayService {
         		if(sessionId.equals(session.getSenderCompID() + "<-->" + session.getTargetCompID())) {
         			
         			if(quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).isLoggedOn()) {
-        				
+
         				quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).logout();
+        				
+        				System.out.println("Executing disconnectSession function==>"+ sessionId);
         			}
         		}
         	}
@@ -113,6 +108,44 @@ FixGatewayService {
     	}catch(Exception e) {
     		e.printStackTrace();
     	}
+    }
+    
+    @Override
+    public void sendOrder(String sessionId) throws IllegalArgumentException{
+    	
+    	try {
+    		
+    		for ( Session session : _engine.getAllSessions() ) {
+    			
+    			if(sessionId.equals(session.getSenderCompID() + "<-->" + session.getTargetCompID())) {
+    				
+        			
+    				if(quickfix.Session.lookupSession(session.getSenderCompID(),session.getTargetCompID()).isLoggedOn()) {
+    					
+
+    					Message ordMsg = _engineFact.createMessage(MsgType.ORDER_SINGLE);
+
+    			        ordMsg.setValue(Tag.ClOrdID, "Cld-1234");
+    			        ordMsg.setValue(Tag.Symbol, "6758");
+    			        ordMsg.setValue(Tag.Side, "1");
+    			        ordMsg.setValue(Tag.OrderQty, "1000");
+    			        ordMsg.setValue(Tag.Price, "123.45");
+    			        ordMsg.setValue(Tag.OrdType, "2");
+    			        ordMsg.setValue(Tag.HandlInst, "3");
+    			        ordMsg.setValue(Tag.TransactTime,"20200508-04:36:42");
+
+    			        session.sendAppMessage(ordMsg);
+    			        
+    			        System.out.println("Executing sendOrder function==>"+ sessionId);
+    				}
+    			}
+    		}
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	
+    	
     }
     
     private static class _Application implements Application {

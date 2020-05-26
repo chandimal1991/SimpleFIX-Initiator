@@ -14,4 +14,5 @@ public interface FixGatewayService extends RemoteService {
     ArrayList<String> getSessionList() throws IllegalArgumentException;
     void connectSession(String session) throws IllegalArgumentException;
     void disconnectSession(String session) throws IllegalArgumentException;
+    void sendOrder(String session) throws IllegalArgumentException;
 }

@@ -40,6 +40,8 @@ public class Fix_wui implements EntryPoint {
     
     private Button                       btnDisconnect;
     
+    private Button                       btnSend;
+    
     /**
      * This is the entry point method.
      */
@@ -60,10 +62,13 @@ public class Fix_wui implements EntryPoint {
 	msgTypeList.setSize("258px", "18px");
 	
 	btnConnect = new Button("Connect");
-	mainPanel.add(btnConnect, 680, 100);
+	mainPanel.add(btnConnect, 630, 100);
 	
 	btnDisconnect = new Button("Disconnect");
-	mainPanel.add(btnDisconnect, 760, 100);
+	mainPanel.add(btnDisconnect, 720, 100);
+	
+	btnSend = new Button("Send");
+	mainPanel.add(btnSend, 830, 100);
 	
 	msgTypeList.addItem("New Single Order (35=D)");
 	msgTypeList.addItem("Order Replace Request (35=G)");
@@ -130,6 +135,29 @@ public class Fix_wui implements EntryPoint {
 	   
 	      }
 	    });
+		
+	// Listen for mouse events on the Send button.
+		btnSend.addClickHandler(new ClickHandler() {
+		   public void onClick(ClickEvent event) {
+			    String session = sessionList.getSelectedValue();
+			    fixGatewayService.sendOrder(session,new AsyncCallback<Void>() {
+			    		  
+			        @Override
+			    	public void onFailure(final Throwable caught) {
+			    	// TODO Auto-generated method stub
+			    			
+			    	}
+			    		    
+			        @Override
+			    	public void onSuccess(Void result) {
+			    		  System.out.println(result);
+			        }
+			    });
+			   
+			}
+		  });
+		
+		
 	
     }
     
